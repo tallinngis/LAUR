@@ -1,0 +1,97 @@
+openapi: 3.0.3
+info:
+  title: Tallinn GIS - Laur Koolide Kaugused API
+  description: Public API for accessing school distance data via ArcGIS FeatureServer.
+  version: 1.0.0
+servers:
+  - url: https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/FeatureServer
+paths:
+  /:
+    get:
+      summary: Get FeatureServer metadata
+      responses:
+        '200':
+          description: Service metadata
+          content:
+            application/json:
+              example:
+                currentVersion: 10.81
+                serviceDescription: "Feature service for school distances"
+  /{layerId}:
+    get:
+      summary: Get layer details
+      parameters:
+        - name: layerId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Layer details
+          content:
+            application/json:
+              example:
+                id: 0
+                name: Schools
+                geometryType: esriGeometryPoint
+  /{layerId}/query:
+    get:
+      summary: Query features
+      parameters:
+        - name: layerId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: where
+          in: query
+          schema:
+            type: string
+          example: "1=1"
+        - name: outFields
+          in: query
+          schema:
+            type: string
+          example: "*"
+        - name: f
+          in: query
+          schema:
+            type: string
+          example: "json"
+      responses:
+        '200':
+          description: Query results
+          content:
+            application/json:
+              example:
+                features:
+                  - attributes:
+                      SchoolName: "Tallinn School"
+                      Distance: 1200
+  /{layerId}/applyEdits:
+    post:
+      summary: Apply edits to features
+      parameters:
+        - name: layerId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              adds: []
+              updates: []
+              deletes: []
+      responses:
+        '200':
+          description: Edit results
+          content:
+            application/json:
+              example:
+                updateResults:
+                  - objectId: 1
+                    success: true

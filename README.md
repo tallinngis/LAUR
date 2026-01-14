@@ -30,7 +30,58 @@ Some endpoints may require an ArcGIS token:
 - `GET /{layerId}/query` – Query features
 - `POST /{layerId}/applyEdits` – Apply edits
 
-### Common Query Parameters
+### Common ArcGIS Query Parameters
+- **`where`** – SQL expression to filter features  
+  *Example:* `where=1=1` or `where=oppekeel='eestikeelne'`
+
+- **`outFields`** – Comma-separated list of fields to return  
+  *Example:* `outFields=*` or `outFields=Name,Distance`
+
+- **`geometry`** – Spatial filter geometry (point, envelope, polygon)  
+  *Example:* `geometry=6590137.73,541389.7`
+
+- **`geometryType`** – Type of geometry provided  
+  *Example:* `geometryType=esriGeometryPoint`
+
+- **`inSR`** – Spatial reference of input geometry  
+  *Example:* `inSR=3301`
+
+- **`outSR`** – Spatial reference for output geometry  
+  *Example:* `outSR=3857`
+
+- **`spatialRel`** – Spatial relationship for filtering  
+  *Example:* `spatialRel=esriSpatialRelIntersects`
+
+- **`distance`** – Buffer distance for point queries  
+  *Example:* `distance=100`
+
+- **`units`** – Units for buffer distance  
+  *Example:* `units=esriSRUnit_Meter`
+
+- **`orderByFields`** – Sort results by one or more fields  
+  *Example:* `orderByFields=Distance ASC`
+
+- **`returnGeometry`** – Whether to include geometry in the response  
+  *Example:* `returnGeometry=true`
+
+- **`resultRecordCount`** – Maximum number of records to return  
+  *Example:* `resultRecordCount=10`
+
+- **`resultOffset`** – Offset for pagination  
+  *Example:* `resultOffset=0`
+
+- **`returnDistinctValues`** – Return distinct values only  
+  *Example:* `returnDistinctValues=true`
+
+- **`groupByFieldsForStatistics`** – Fields to group by for statistics  
+  *Example:* `groupByFieldsForStatistics=oppekeel`
+
+- **`outStatistics`** – JSON defining statistical operations  
+  *Example:*  
+  ```json
+  outStatistics=[{"statisticType":"avg","onStatisticField":"Distance","outStatisticFieldName":"avg_distance"}]
+  ``
+
 - `where` – SQL filter (e.g., `1=1`)
 - `outFields` – Fields to return (e.g., `*`)
 - `geometry` – Spatial filter
@@ -38,6 +89,8 @@ Some endpoints may require an ArcGIS token:
 - `orderByFields` – Sort results
 - `returnGeometry` – Include geometry in response
 - `resultRecordCount` – Limit number of records
+- sort orderByFields
+- `sr` - inSR= ja outSR= (nt 3301)
 - 
 **##Request format**
 
@@ -50,8 +103,7 @@ Some endpoints may require an ArcGIS token:
 GET /0/query?where=1=1&outFields=*&f=json&resultRecordCount=10
 ```
 
-## Contributing
-Feel free to submit issues or pull requests to improve the documentation.
+## Error codes
 
 ## License
 MIT License

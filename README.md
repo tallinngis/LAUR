@@ -25,10 +25,31 @@ Some endpoints may require an ArcGIS token:
 ```
 
 ## Endpoints
-- `GET /` – Service metadata
-- `GET /{layerId}` – Layer details
-- `GET /{layerId}/query` – Query features
-- `POST /{layerId}/applyEdits` – Apply edits
+
+## Endpoints
+
+### Service-level
+- `GET /` – Service metadata  
+  *Example:* `/FeatureServer?f=json`
+
+- `GET /layers` – List all layers in the service  
+  *Example:* `/FeatureServer/layers?f=json`
+
+### Layer-level
+- `GET /{layerId}` – Layer details  
+  *Example:* `/FeatureServer/{layerId}?f=json`
+
+- `GET /{layerId}/query` – Query features (supports GET and POST)  
+  *Example:* `/FeatureServer/{layerId}/query`
+
+- `POST /{layerId}/applyEdits` – Add, update, or delete features  
+  *Example:* `/FeatureServer/{layerId}/applyEdits`
+
+- `POST /{layerId}/generateRenderer` – Generate a renderer based on data  
+  *Example:* `/FeatureServer/{layerId}/generateRenderer`
+
+- `GET /{layerId}/queryDomains` – Query domain information for fields  
+  *Example:* `/FeatureServer/{layerId}/queryDomains`
 
 ### Common ArcGIS Query Parameters
 - **`where`** – SQL expression to filter features  

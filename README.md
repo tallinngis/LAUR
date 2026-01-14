@@ -16,13 +16,7 @@ https://tallinngis.github.io/LAUR/swagger_ui.html
 ```
 
 ## Authentication
-Some endpoints may require an ArcGIS token:
-- Obtain a token from your ArcGIS account.
-- Authorization: Bearer {API_KEY}? or X-Esri-Authorization: Bearer <token>
-- Pass it as a query parameter:
-```
-?token=YOUR_TOKEN
-```
+- Authorization: Bearer {API_KEY}? OR X-Esri-Authorization: Bearer <token>
 
 ## Endpoints
 

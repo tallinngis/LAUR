@@ -139,10 +139,11 @@ GET https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/Fea
   &returnGeometry=false
   &f=json
 ```
-To return only the nearest point:
-```
+
+To return only the nearest point (attributes only):
 &orderByFields=distance ASC
 &resultRecordCount=1
+&returnGeometry=false
 
 ### POST Example (application/x-www-form-urlencoded)
 ```bash

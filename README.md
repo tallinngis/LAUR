@@ -5,8 +5,8 @@ See repository majutab **avalikku API dokumentatsiooni** koolide kauguste andmet
 
 **Base URL:**
 ```
-https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/FeatureServer
-https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/FeatureServer/0/query?
+Teenus: https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/FeatureServer
+Andmete päring: https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/FeatureServer/0/query?
 ```
 
 ## How to Use

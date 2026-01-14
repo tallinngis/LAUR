@@ -56,7 +56,7 @@ Some endpoints may require an ArcGIS token:
   *Example:* `where=1=1` or `where=oppekeel='eestikeelne'`
 
 - **`outFields`** – Comma-separated list of fields to return  
-  *Example:* `outFields=*` or `outFields=Name,Distance`
+  *Example:* `outFields=*` or `outFields=nimi,ehisid`
 
 - **`geometry`** – Spatial filter geometry (point, envelope, polygon)  
   *Example:* `geometry=6590137.73,541389.7`
@@ -102,19 +102,50 @@ Some endpoints may require an ArcGIS token:
   ```json
   outStatistics=[{"statisticType":"avg","onStatisticField":"Distance","outStatisticFieldName":"avg_distance"}]
   ``
+- **`f`** – Output format  
+  *Example:* `f=json`
+
+- **`token`** – ArcGIS authentication token (if required)  
+  *Example:* `token=YOUR_TOKEN`
+
 
 ## Request Format
 
 - **Protocol:** HTTPS  
-- **Data format:** JSON (ArcGIS REST API responses are typically JSON; GeoJSON may be used if supported)  
+- **Response format:** JSON (ArcGIS REST API responses are typically JSON; GeoJSON may be used if supported)  
 - **Encoding:** UTF-8  
 - **Methods:** GET and POST (POST recommended for complex queries or large payloads)  
+- **Supported POST Content-Types:**  
+  - `application/x-www-form-urlencoded` (recommended for query operations)  
+  - `multipart/form-data` (used for operations involving file uploads, e.g., attachments) 
 
-## Example Query
-```
-GET /0/query?where=1=1&outFields=*&f=json&resultRecordCount=10
+## Quick Start Examples
+
+### GET Example
+```http
+GET https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/FeatureServer/0/query
+  ?where=1=1
+  &outFields=*
+  &f=json
+  &resultRecordCount=10
 ```
 
+### POST Example (application/x-www-form-urlencoded)
+```bash
+curl -X POST   'https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/FeatureServer/0/query'   -H 'Content-Type: application/x-www-form-urlencoded'   --data-urlencode 'where=1=1'   --data-urlencode 'outFields=*'   --data-urlencode 'returnGeometry=true'   --data-urlencode 'f=json'   --data-urlencode 'resultRecordCount=10'   --data-urlencode 'token=YOUR_TOKEN'
+```
+
+### POST Example (application/json)
+```bash
+curl -X POST   'https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/FeatureServer/0/query'   -H 'Content-Type: application/json'   -d '{
+    "where": "1=1",
+    "outFields": "*",
+    "returnGeometry": true,
+    "resultRecordCount": 10,
+    "f": "json",
+    "token": "YOUR_TOKEN"
+  }'
+```
 ## Error codes
 
 ## License

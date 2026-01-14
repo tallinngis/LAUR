@@ -26,8 +26,6 @@ Some endpoints may require an ArcGIS token:
 
 ## Endpoints
 
-## Endpoints
-
 ### Service-level
 - `GET /` – Service metadata  
   *Example:* `/FeatureServer?f=json`
@@ -124,11 +122,38 @@ Some endpoints may require an ArcGIS token:
 ### GET Example
 ```http
 GET https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/FeatureServer/0/query
-  ?where=1=1
-  &outFields=*
+  ?where=1=1 #all objects
+  &outFields=* #all fields
   &f=json
   &resultRecordCount=10
 ```
+
+### Example: Spatial Query with Buffer
+
+This example returns all features within a 10-meter radius of a given point.
+
+**Parameters:**
+- `geometry=<X>,<Y>` – Input point coordinates
+- `geometryType=esriGeometryPoint` – Geometry type
+- `inSR=3301` – Spatial reference of input geometry
+- `distance=<tolerance>` – Buffer distance (e.g., 10 meters)
+- `units=esriSRUnit_Meter` – Units for buffer
+- `returnGeometry=false` – Do not return geometry in response
+- `outFields=*` – Return all fields
+- `f=json` – Output format
+
+**Example Request:**
+```http
+GET https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/FeatureServer/0/query
+  ?geometry=6579566.77,535528.24
+  &geometryType=esriGeometryPoint
+  &inSR=3301
+  &distance=10
+  &units=esriSRUnit_Meter
+  &outFields=*
+  &returnGeometry=false
+  &f=json
+
 
 ### POST Example (application/x-www-form-urlencoded)
 ```bash

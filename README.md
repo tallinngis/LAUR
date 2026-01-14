@@ -160,7 +160,19 @@ curl -X POST   'https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_
     "token": "YOUR_TOKEN"
   }'
 ```
-## Error codes
+## Error Codes
+- **200 OK** – Request successful
+- **400 Bad Request** – Invalid query parameters
+- **401 Unauthorized** – Missing or invalid token
+- **403 Forbidden** – Insufficient privileges
+- **500 Internal Server Error** – Server-side error
 
-## License
-MIT License
+ArcGIS error response example:
+```json
+{
+  "error": {
+    "code": 400,
+    "message": "Invalid query parameters",
+    "details": ["Invalid geometry"]
+  }
+}

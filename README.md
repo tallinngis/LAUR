@@ -1,11 +1,12 @@
 # Tallinn GIS - Laur Koolide Kaugused API Documentation
 
 ## Overview
-This repository hosts the **public API documentation** for accessing school distance data via the ArcGIS FeatureServer.
+See repository majutab **avalikku API dokumentatsiooni** koolide kauguste andmetele juurdepääsuks ArcGIS FeatureServeri kaudu. API eesmärk on  pakkuda geoinfo andmeid, et X ja Y koordinaatide alusel saaks leida x lähimat kooli mingi aadressi jaoks 
 
 **Base URL:**
 ```
 https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/FeatureServer
+https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/FeatureServer/0/query?
 ```
 
 ## How to Use
@@ -17,6 +18,7 @@ https://tallinngis.github.io/LAUR/swagger_ui.html
 ## Authentication
 Some endpoints may require an ArcGIS token:
 - Obtain a token from your ArcGIS account.
+- Authorization: Bearer {API_KEY}? or X-Esri-Authorization: Bearer <token>
 - Pass it as a query parameter:
 ```
 ?token=YOUR_TOKEN
@@ -36,6 +38,12 @@ Some endpoints may require an ArcGIS token:
 - `orderByFields` – Sort results
 - `returnGeometry` – Include geometry in response
 - `resultRecordCount` – Limit number of records
+- 
+**##Request format**
+
+-Protocol: HTTPS
+-Data format: JSON (or GeoJSON if necessary)
+
 
 ## Example Query
 ```

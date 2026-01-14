@@ -82,16 +82,6 @@ Some endpoints may require an ArcGIS token:
   outStatistics=[{"statisticType":"avg","onStatisticField":"Distance","outStatisticFieldName":"avg_distance"}]
   ``
 
-- `where` – SQL filter (e.g., `1=1`)
-- `outFields` – Fields to return (e.g., `*`)
-- `geometry` – Spatial filter
-- `spatialRel` – Spatial relationship (e.g., `esriSpatialRelIntersects`)
-- `orderByFields` – Sort results
-- `returnGeometry` – Include geometry in response
-- `resultRecordCount` – Limit number of records
-- sort orderByFields
-- `sr` - inSR= ja outSR= (nt 3301)
-- 
 **##Request format**
 
 -Protocol: HTTPS

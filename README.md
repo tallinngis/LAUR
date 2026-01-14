@@ -40,15 +40,6 @@ Some endpoints may require an ArcGIS token:
 - `GET /{layerId}/query` – Query features (supports GET and POST)  
   *Example:* `/FeatureServer/{layerId}/query`
 
-- `POST /{layerId}/applyEdits` – Add, update, or delete features  
-  *Example:* `/FeatureServer/{layerId}/applyEdits`
-
-- `POST /{layerId}/generateRenderer` – Generate a renderer based on data  
-  *Example:* `/FeatureServer/{layerId}/generateRenderer`
-
-- `GET /{layerId}/queryDomains` – Query domain information for fields  
-  *Example:* `/FeatureServer/{layerId}/queryDomains`
-
 ### Common ArcGIS Query Parameters
 - **`where`** – SQL expression to filter features  
   *Example:* `where=1=1` or `where=oppekeel='eestikeelne'`
@@ -66,7 +57,7 @@ Some endpoints may require an ArcGIS token:
   *Example:* `inSR=3301`
 
 - **`outSR`** – Spatial reference for output geometry  
-  *Example:* `outSR=3857`
+  *Example:* `outSR=3301`
 
 - **`spatialRel`** – Spatial relationship for filtering  
   *Example:* `spatialRel=esriSpatialRelIntersects`
@@ -153,7 +144,11 @@ GET https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/Fea
   &outFields=*
   &returnGeometry=false
   &f=json
-
+```
+To return only the nearest point:
+```
+&orderByFields=distance ASC
+&resultRecordCount=1
 
 ### POST Example (application/x-www-form-urlencoded)
 ```bash

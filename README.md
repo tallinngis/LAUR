@@ -103,11 +103,12 @@ Some endpoints may require an ArcGIS token:
   outStatistics=[{"statisticType":"avg","onStatisticField":"Distance","outStatisticFieldName":"avg_distance"}]
   ``
 
-**##Request format**
+## Request Format
 
--Protocol: HTTPS
--Data format: JSON (or GeoJSON if necessary)
-
+- **Protocol:** HTTPS  
+- **Data format:** JSON (ArcGIS REST API responses are typically JSON; GeoJSON may be used if supported)  
+- **Encoding:** UTF-8  
+- **Methods:** GET and POST (POST recommended for complex queries or large payloads)  
 
 ## Example Query
 ```

@@ -63,7 +63,7 @@ https://tallinngis.github.io/LAUR/swagger_ui.html
   *Example:* `units=esriSRUnit_Meter`
 
 - **`orderByFields`** – Sort results by one or more fields  
-  *Example:* `orderByFields=Distance ASC`
+  *Example:* `orderByFields=rank ASC`
 
 - **`returnGeometry`** – Whether to include geometry in the response  
   *Example:* `returnGeometry=true`
@@ -161,12 +161,6 @@ GET https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/Fea
   &outFields=*
   &returnGeometry=true
   &f=json
-
----
-
-# ✅ What you should add next (copy‑paste ready)
-
-You should follow this section with:
 
 ---
 

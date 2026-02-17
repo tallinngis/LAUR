@@ -139,11 +139,140 @@ GET https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/Fea
   &returnGeometry=false
   &f=json
 ```
+### How to return only the nearest point
 
-To return only the nearest point (attributes only):
-&orderByFields=distance ASC
-&resultRecordCount=1
-&returnGeometry=false
+ArcGIS FeatureServer does not compute distance to your input point.  
+To get the nearest object:
+
+1. Query all features within a buffer around your location:
+   - `distance=<meters>`
+   - `returnGeometry=true`
+2. Compute distance client‑side (e.g., Euclidean distance in EPSG:3301).
+3. Select the feature with the smallest distance.
+
+Example request:
+```http
+GET https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/FeatureServer/0/query
+  ?geometry=6579566.77,535528.24
+  &geometryType=esriGeometryPoint
+  &inSR=3301
+  &distance=10
+  &units=esriSRUnit_Meter
+  &outFields=*
+  &returnGeometry=true
+  &f=json
+
+---
+
+# ✅ What you should add next (copy‑paste ready)
+
+You should follow this section with:
+
+---
+
+## ✔ Why server-side sorting cannot return the nearest point
+
+ArcGIS FeatureServer **cannot sort by geometric distance** to your input point.  
+`orderByFields=distance ASC` works **only** if your layer has a real attribute field named `distance`.  
+Since your service does not contain such a field, sorting by distance must be done **client‑side**.
+
+This is why:
+
+- `orderByFields=distance ASC` → **does not work**  
+- `resultRecordCount=1` → **does not guarantee the nearest**  
+- `returnGeometry=false` → makes it impossible to compute the nearest  
+
+Therefore, always use `returnGeometry=true` when calculating nearest features.
+
+---
+
+## ✔ Example: Client-side nearest point calculation (JavaScript)
+
+```js
+// Input point in EPSG:3301 (meters)
+const input = { x: 6579566.77, y: 535528.24 };
+
+function distance(a, b) {
+  return Math.hypot(a.x - b.x, a.y - b.y); // Euclidean distance
+}
+
+async function findNearest() {
+  const url = "https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/FeatureServer/0/query";
+  const params = new URLSearchParams({
+    geometry: `${input.x},${input.y}`,
+    geometryType: "esriGeometryPoint",
+    inSR: "3301",
+    distance: "100",
+    units: "esriSRUnit_Meter",
+    outFields: "*",
+    returnGeometry: "true",
+    f: "json"
+  });
+
+  const res = await fetch(`${url}?${params}`);
+  const data = await res.json();
+
+  let nearest = null;
+  let bestDist = Infinity;
+
+  for (const f of data.features) {
+    const g = f.geometry;
+    if (!g) continue;
+
+    const d = distance(input, g);
+    if (d < bestDist) {
+      bestDist = d;
+      nearest = { distance: d, attributes: f.attributes, geometry: g };
+    }
+  }
+
+  return nearest;
+}
+
+## ✔ Example: Client-side nearest point calculation (Python)
+
+import math
+import requests
+
+input_x, input_y = 6579566.77, 535528.24
+
+def dist(x1, y1, x2, y2):
+    return math.hypot(x1 - x2, y1 - y2)
+
+params = {
+    "geometry": f"{input_x},{input_y}",
+    "geometryType": "esriGeometryPoint",
+    "inSR": "3301",
+    "distance": "100",
+    "units": "esriSRUnit_Meter",
+    "outFields": "*",
+    "returnGeometry": "true",
+    "f": "json"
+}
+
+url = "https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/FeatureServer/0/query"
+
+response = requests.get(url, params=params).json()
+features = response.get("features", [])
+
+nearest = None
+best_dist = float("inf")
+
+for f in features:
+    geom = f.get("geometry")
+    if not geom:
+        continue
+
+    d = dist(input_x, input_y, geom["x"], geom["y"])
+    if d < best_dist:
+        best_dist = d
+        nearest = {
+            "distance": d,
+            "attributes": f["attributes"],
+            "geometry": geom
+        }
+
+print(nearest)
 
 ### POST Example (application/x-www-form-urlencoded)
 ```bash

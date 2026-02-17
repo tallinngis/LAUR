@@ -138,7 +138,34 @@ GET https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/Fea
   &outFields=*
   &returnGeometry=false
   &f=json
+
 ```
+### Kuidas leida puhvris esimene ettejuhtuv `adrid` ja tagastada selle kõik vasted
+
+Kui puhvris (nt 5–10 meetri raadiuses) sobib ükskõik milline `adrid` punkt
+ja iga `adrid` kohta on andmestikus juba **10 eelnevalt arvutatud kooli**,
+siis kasuta kahte sammu.
+
+#### 1. samm — leia puhvrist esimene ettejuhtuv `adrid`
+```http
+GET .../query
+  ?geometry=<X>,<Y>
+  &geometryType=esriGeometryPoint
+  &inSR=3301
+  &distance=10
+  &units=esriSRUnit_Meter
+  &outFields=adrid
+  &resultRecordCount=1
+  &returnGeometry=false
+  &f=json
+
+GET .../query
+  ?where=adrid=<LEITUD_ADRID>
+  &outFields=*
+  &orderByFields=kaugus_m_2komakohta ASC
+  &returnGeometry=false
+  &f=json
+
 ### How to return only the nearest point
 
 ArcGIS FeatureServer does not compute distance to your input point.  

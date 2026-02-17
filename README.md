@@ -179,90 +179,109 @@ This is why:
 Therefore, always use `returnGeometry=true` when calculating nearest features.
 
 ---
+### Client-side nearest point examples
+Because ArcGIS FeatureServer does not compute distance to your input geometry,
+you must calculate the nearest feature client-side after querying a buffer.
 
+Below are ready-to-use examples in JavaScript and Python.
 ## ✔ Example: Client-side nearest point calculation (JavaScript)
 
-```js
 // Input point in EPSG:3301 (meters)
 const input = { x: 6579566.77, y: 535528.24 };
 
+// Euclidean distance in projected coordinates
 function distance(a, b) {
-  return Math.hypot(a.x - b.x, a.y - b.y); // Euclidean distance
+  return Math.hypot(a.x - b.x, a.y - b.y);
 }
 
-async function findNearest() {
-  const url = "https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/FeatureServer/0/query";
+async function findNearestSchool() {
+  const baseUrl =
+    "https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/FeatureServer/0/query";
+
   const params = new URLSearchParams({
     geometry: `${input.x},${input.y}`,
     geometryType: "esriGeometryPoint",
     inSR: "3301",
-    distance: "100",
+    distance: "100",              // search radius
     units: "esriSRUnit_Meter",
     outFields: "*",
     returnGeometry: "true",
     f: "json"
   });
 
-  const res = await fetch(`${url}?${params}`);
-  const data = await res.json();
+  const response = await fetch(`${baseUrl}?${params.toString()}`);
+  const data = await response.json();
 
   let nearest = null;
-  let bestDist = Infinity;
+  let minDistance = Infinity;
 
-  for (const f of data.features) {
-    const g = f.geometry;
+  for (const feature of data.features ?? []) {
+    const g = feature.geometry;
     if (!g) continue;
 
     const d = distance(input, g);
-    if (d < bestDist) {
-      bestDist = d;
-      nearest = { distance: d, attributes: f.attributes, geometry: g };
+    if (d < minDistance) {
+      minDistance = d;
+      nearest = {
+        distance: d,
+        attributes: feature.attributes,
+        geometry: g
+      };
     }
   }
 
   return nearest;
 }
 
+// Example usage:
+findNearestSchool().then(result => console.log(result));
+
 ## ✔ Example: Client-side nearest point calculation (Python)
 
 import math
 import requests
 
-input_x, input_y = 6579566.77, 535528.24
+# Input coordinate (EPSG:3301 – meters)
+input_x = 6579566.77
+input_y = 535528.24
 
-def dist(x1, y1, x2, y2):
+def distance(x1, y1, x2, y2):
+    """Euclidean distance in meters."""
     return math.hypot(x1 - x2, y1 - y2)
+
+url = (
+    "https://gis.tallinn.ee/arcgis/rest/services/"
+    "Hosted/laur_koolide_kaugused/FeatureServer/0/query"
+)
 
 params = {
     "geometry": f"{input_x},{input_y}",
     "geometryType": "esriGeometryPoint",
     "inSR": "3301",
-    "distance": "100",
+    "distance": "100",             # search radius
     "units": "esriSRUnit_Meter",
     "outFields": "*",
     "returnGeometry": "true",
     "f": "json"
 }
 
-url = "https://gis.tallinn.ee/arcgis/rest/services/Hosted/laur_koolide_kaugused/FeatureServer/0/query"
-
-response = requests.get(url, params=params).json()
+response = requests.get(url, params=params, timeout=30).json()
 features = response.get("features", [])
 
 nearest = None
 best_dist = float("inf")
 
-for f in features:
-    geom = f.get("geometry")
+for feature in features:
+    geom = feature.get("geometry")
     if not geom:
         continue
 
-    d = dist(input_x, input_y, geom["x"], geom["y"])
+    d = distance(input_x, input_y, geom["x"], geom["y"])
     if d < best_dist:
         best_dist = d
         nearest = {
             "distance": d,
-            "attributes": f["attributes"],
+            "attributes": feature["attributes"],
             "geometry": geom
         }
 
